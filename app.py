@@ -1,10 +1,11 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect,session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField,FileField
 from wtforms.validators import InputRequired, Length, ValidationError
 import os
+
 
 from werkzeug.utils import secure_filename
 
@@ -15,9 +16,7 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
-
 # file configuration
-app.config['UPLOAD_FOLDER'] = 'static/files'
 
 class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
@@ -77,6 +76,8 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+        usrname = User(username=form.username.data)
+        session["user"]=usrname.username
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
@@ -88,9 +89,14 @@ def login():
 @login_required
 def dashboard():
     form = UploadFileForm()
+    
+    strusername=str(session["user"])
+
     if form.validate_on_submit():
         file = form.file.data # First grab the file
-        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),f"C:\\Users\\kralAhmet\\Desktop\\flask\\total\\flasklogin\\static\\users\\{strusername}",secure_filename(file.filename))) # Then save the file
+        
+        
         return "File has been uploaded."
     return render_template('dashboard.html', form=form)
 
@@ -107,10 +113,15 @@ def register():
     form = RegisterForm()
 
     if form.validate_on_submit():
+        
         hashed_password = bcrypt.generate_password_hash(form.password.data)
         new_user = User(username=form.username.data, password=hashed_password)
+       
         db.session.add(new_user)
         db.session.commit()
+        os.chdir("C:\\Users\\kralAhmet\\Desktop\\flask\\total\\flasklogin\\static\\users")
+        os.mkdir(f"{new_user.username}")
+        
         return redirect(url_for('login'))
 
     return render_template('register.html', form=form)

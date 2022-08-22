@@ -7,11 +7,15 @@
     <title>Home</title>
 </head>
 <body>
-    <h1>Flask File Uploads Tutorial</h1>
+    
     <form method="POST" enctype="multipart/form-data">
         {{form.hidden_tag()}}
         {{form.file()}}
         {{form.submit()}}
+        
     </form>
+    {% for filename in users_dir %}
+        <a href="">{{ filename }}</a><br />
+    {% endfor %}
 </body>
 </html>

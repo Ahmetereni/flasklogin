@@ -91,14 +91,15 @@ def dashboard():
     form = UploadFileForm()
     
     strusername=str(session["user"])
+    users_dir=f"C:\\Users\\kralAhmet\\Desktop\\flask\\total\\flasklogin\\static\\users\\{strusername}"
 
     if form.validate_on_submit():
         file = form.file.data # First grab the file
-        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),f"C:\\Users\\kralAhmet\\Desktop\\flask\\total\\flasklogin\\static\\users\\{strusername}",secure_filename(file.filename))) # Then save the file
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),users_dir,secure_filename(file.filename))) # Then save the file
         
         
-        return "File has been uploaded."
-    return render_template('dashboard.html', form=form)
+        return render_template('dashboard.html', form=form,users_dir=os.listdir(users_dir))
+    return render_template('dashboard.html', form=form,users_dir=os.listdir(users_dir))
 
 
 @app.route('/logout', methods=['GET', 'POST'])

@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, redirect,session
+from io import BytesIO
+from flask import Flask, render_template, url_for, redirect,session, send_file, current_app as app
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -102,11 +103,21 @@ def dashboard():
     return render_template('dashboard.html', form=form,users_dir=os.listdir(users_dir))
 
 
-@app.route('/logout', methods=['GET', 'POST'])
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
+
+
+
+
+
+@app.route('/pdfview/', methods=['GET','POST'])
+def pdfview():
+    # with open('C:\\Users\\kralAhmet\\Desktop\\PDF.pdf', 'rb') as static_file:
+        
+        return send_file('/Users/kralAhmet/Desktop/sample.pdf', attachment_filename='sample.pdf')
+
+
+
+
+
 
 
 @ app.route('/register', methods=['GET', 'POST'])

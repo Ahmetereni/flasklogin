@@ -16,11 +16,13 @@
         {{form.submit()}}
 
     </form>
-    <!-- {% for filename in users_dir %}
-    <p>{{ filename }}</p> -->
+
+    {% for filename in users_dir %}
+    <a href=http://127.0.0.1:5000/dashboard/{{filename}}>{{filename}}</a><br>
+    <!-- <p>http://127.0.0.1:5000/dashboard/{{ filename }}</p> -->
 
 
-    <!-- {% endfor %} -->
+    {% endfor %}
 
 </body>
 

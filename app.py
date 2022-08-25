@@ -1,5 +1,5 @@
 from io import BytesIO
-from flask import Flask, render_template, url_for, redirect,session, send_file, current_app as app
+from flask import Flask, render_template, url_for, redirect,session, send_file, current_app as app,send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -22,6 +22,8 @@ app.config['SECRET_KEY'] = 'thisisasecretkey'
 class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
     submit = SubmitField("Upload File")
+
+
 
 
 login_manager = LoginManager()
@@ -105,6 +107,12 @@ def dashboard():
 
 
 
+
+@app.route('/dashboard/<path:filename>')
+def send_attachment(filename):
+    strusername=str(session["user"])
+    usersdir=f"C:\\Users\\kralAhmet\\Desktop\\flask\\total\\flasklogin\\static\\users\\{strusername}\\{filename}"
+    return send_file(usersdir, attachment_filename=f'{filename}')
 
 
 

@@ -116,12 +116,6 @@ def send_attachment(filename):
 
 
 
-@app.route('/pdfview/', methods=['GET','POST'])
-def pdfview():
-    # with open('C:\\Users\\kralAhmet\\Desktop\\PDF.pdf', 'rb') as static_file:
-        
-        return send_file('/Users/kralAhmet/Desktop/sample.pdf', attachment_filename='sample.pdf')
-
 
 
 
